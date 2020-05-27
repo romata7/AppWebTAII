@@ -1,0 +1,248 @@
+<% include _header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-7 col-sm-6 col-md-5 col-lg-4 col-xl-3 mx-auto mt-3 ">
+            <div class="card">
+                <div class="card-header">Agregar Ingreso</div>
+                <form action="/ingreso/agregar" method="post">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Bus:</small>
+                        <select name="bus" id="add_buss" class="form-control form-control-sm" autofocus>
+                            <% for(var i = 0; i < buses.length; i++){ %>
+                            <% var bus = buses[i] %>
+                            <option value="<%= JSON.stringify(bus) %>"><%= bus.nro %> : <%= bus.placa %>
+                            </option>
+                            <% } %>
+                        </select>
+                        <small class="form-text text-muted">Monto:</small>
+                        <input type="number" step="0.01" class="form-control form-control-sm" value="1000.00" required
+                            name="monto">
+                        <small class="form-text text-muted">Aportante:</small>
+                        <input type="text" class="form-control form-control-sm" required name="aportante">
+                        <small class="form-text text-muted">Empresa:</small>
+                        <input type="text" class="form-control form-control-sm" value="CAJA CUSCO" required
+                            name="empresa">
+                        <small class="form-text text-muted">referencia:</small>
+                        <input type="text" class="form-control form-control-sm" name="referencia">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm mr-1" type="submit">Registrar</button>
+                            <a href="/ingresos" class="btn btn-secondary btn-sm">Limpiar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 mt-3 small">
+            <table class="table table-hover table-sm text-nowrap">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th class="text-nowrap">Nro Ingreso</th>
+                        <th>Fecha</th>
+                        <th>Bus</th>
+                        <th>Monto</th>
+                        <th>Aportante</th>
+                        <th>Empresa</th>
+                        <th>Referencia</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = ingresos.length - 1; i >= 0; i--){ %>
+                    <% var ingreso = ingresos[i] %>
+                    <tr>
+                        <td class="align-middle"><%= i + 1 %></td>
+                        <td class="align-middle text-center"> <%= ingreso._id %></td>
+                        <td class="align-middle"><%= ingreso.log.fecha.toLocaleString() %></td>
+                        <td class="align-middle font-weight-bold"><%= ingreso.bus.nro %> : <%= ingreso.bus.placa %></td>
+                        <td class="align-middle"><%= ingreso.monto.toFixed(2) %></td>
+                        <td class="align-middle"><%= ingreso.aportante %></td>
+                        <td class="align-middle"><%= ingreso.empresa %></td>
+                        <td class="align-middle"><%= ingreso.referencia %></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-danger mr-1"
+                                    onclick="proceder('del','<%= JSON.stringify(ingreso) %>')">Eliminar</button>
+                                <button class="btn btn-secondary"
+                                    onclick="proceder('edit','<%= JSON.stringify(ingreso) %>')">Modificar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Password -->
+<div class="modal" id="modalPass">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <img src="img/RootmarsFall.gif" alt="" class="card-img-top">
+                <div class="card-body">
+                    <div class="form-group">
+                        <small class="form-text text-muted">Contraseña: </small>
+                        <input type="password" class="form-control form-control-sm" id="pass">
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm btn-block text-center" data-dismiss="modal">No sé la
+                        Contraseña
+                        ಥ_ಥ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin -->
+<!-- Modal Eliminar -->
+<div class="modal" id="modalDel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">Eliminar Ingreso</div>
+                <form action="/ingreso/elimnar" method="post" id="form_ingreso_del">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Nro Ingreso:</small>
+                        <input class="form-control form-control-sm" type="text" id="del_nro" readonly>
+                        <small class="form-text text-muted">Bus:</small>
+                        <select name="bus" id="del_bus" class="form-control form-control-sm" disabled>
+                            <% for(var i = 0; i < buses.length; i++){ %>
+                            <% var bus = buses[i] %>
+                            <option value="<%= JSON.stringify(bus) %>"><%= bus.nro %> : <%= bus.placa %>
+                            </option>
+                            <% } %>
+                        </select>
+                        <input type="text" name="bus" id="del_i_bus" hidden>
+                        <small class="form-text text-muted">Monto:</small>
+                        <input type="number" step="0.01" class="form-control form-control-sm" value="1000.00" readonly
+                            name="monto" id="del_monto">
+                        <small class="form-text text-muted">Aportante:</small>
+                        <input type="text" class="form-control form-control-sm" readonly name="aportante"
+                            id="del_aportante">
+                        <small class="form-text text-muted">Empresa:</small>
+                        <input type="text" class="form-control form-control-sm" value="CAJA CUSCO" readonly
+                            name="empresa" id="del_empresa">
+                        <small class="form-text text-muted">referencia:</small>
+                        <input type="text" class="form-control form-control-sm" name="referencia" readonly
+                            id="del_referencia">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-danger btn-sm mr-1" type="submit">Eliminar</button>
+                            <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin Modal Eliminar -->
+<!-- Modal Modificar -->
+<div class="modal" id="modalEdit">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">Modificar Ingreso</div>
+                <form action="/ingreso/modificar" method="post" id="form_ingreso_edit">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Nro Ingreso:</small>
+                        <input class="form-control form-control-sm" type="text" id="edit_nro" readonly>
+                        <small class="form-text text-muted">Bus:</small>
+                        <select name="bus" id="edit_bus" class="form-control form-control-sm">
+                            <% for(var i = 0; i < buses.length; i++){ %>
+                            <% var bus = buses[i] %>
+                            <option value="<%= JSON.stringify(bus) %>"><%= bus.nro %> : <%= bus.placa %>
+                            </option>
+                            <% } %>
+                        </select>
+                        <small class="form-text text-muted">Monto:</small>
+                        <input type="number" step="0.01" class="form-control form-control-sm" value="1000.00" required
+                            name="monto" id="edit_monto">
+                        <small class="form-text text-muted">Aportante:</small>
+                        <input type="text" class="form-control form-control-sm" required name="aportante"
+                            id="edit_aportante">
+                        <small class="form-text text-muted">Empresa:</small>
+                        <input type="text" class="form-control form-control-sm" value="CAJA CUSCO" required
+                            name="empresa" id="edit_empresa">
+                        <small class="form-text text-muted">referencia:</small>
+                        <input type="text" class="form-control form-control-sm" name="referencia" required
+                            id="edit_referencia">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-success btn-sm mr-1" type="submit">Modificar</button>
+                            <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin Modal Modificar -->
+<% include _footer %>
+
+<script>
+    var op = ""
+    var ing = ""
+    function proceder(operacion, ingreso) {
+        op = operacion
+        ing = ingreso
+        $("#modalPass").modal('show')
+        $("#pass").val('')
+        $("#pass").focus()
+    }
+    $("#pass").keyup(() => {
+        if ($("#pass").val() == '<%= pass %>') {
+            $("#modalPass").modal('hide')
+            if (op == "del") {
+                Eliminar(ing)
+            } else {
+                if (op == 'edit') {
+                    Modificar(ing)
+                }
+            }
+        }
+    })
+    function Eliminar(ingreso) {
+        ingreso = JSON.parse(ingreso)
+        $("#form_ingreso_del").attr('action', '/ingreso/eliminar/' + ingreso._id)
+        $("#del_nro").val(ingreso._id)
+        $("#del_bus").val(JSON.stringify(ingreso.bus))
+        $("#del_i_bus").val(JSON.stringify(ingreso.bus))
+        $("#del_monto").val(ingreso.monto)
+        $("#del_aportante").val(ingreso.aportante)
+        $("#del_empresa").val(ingreso.empresa)
+        $("#del_referencia").val(ingreso.referencia)
+        $("#modalDel").modal('show')
+    }
+    function Modificar(ingreso) {
+        ingreso = JSON.parse(ingreso)
+        $("#form_ingreso_edit").attr('action', '/ingreso/modificar/' + ingreso._id)
+        $("#edit_nro").val(ingreso._id)
+        $("#edit_bus").val(JSON.stringify(ingreso.bus))
+        $("#edit_monto").val(ingreso.monto)
+        $("#edit_aportante").val(ingreso.aportante)
+        $("#edit_empresa").val(ingreso.empresa)
+        $("#edit_referencia").val(ingreso.referencia)
+        $("#modalEdit").modal('show')
+        $("#edit_bus").focus()
+    }
+    // En todas las Ventanas
+    $("input").keyup(input => {
+        input.target.value = input.target.value.toUpperCase()
+    })
+    $("#cargando").hide()
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>

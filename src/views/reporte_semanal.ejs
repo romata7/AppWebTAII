@@ -1,0 +1,102 @@
+<% include _header %>
+
+<div class="container small">
+    <div class="row">
+        <div class="col mt-3">
+            <table class="table table-sm table-hover small">
+                <thead class="thead thead-dark">
+                    <tr class="text-center">
+                        <th>Bus Nro</th>
+                        <th>Lunes <br> <%= semana[0].toLocaleDateString() %></th>
+                        <th>Martes <br><%= semana[1].toLocaleDateString() %></th>
+                        <th>Miércoles <br><%= semana[2].toLocaleDateString() %></th>
+                        <th>Jueves <br><%= semana[3].toLocaleDateString() %></th>
+                        <th>Viernes <br><%= semana[4].toLocaleDateString() %></th>
+                        <th>Sábado <br><%= semana[5].toLocaleDateString() %></th>
+                        <th>Domingo <br><%= semana[6].toLocaleDateString() %></th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Recorremos los Buses -->
+                    <% for(var i = 0; i < buses.length; i++){ %>
+                    <% var bus = buses[i] %>
+                    <tr>
+                        <td class="text-center"><%= bus.nro %></td>
+                        <% var suma_ingreso = 0 %>
+                        <% var suma_venta = 0 %>
+                        <!-- Recorremos los dias de la semana -->
+                        <% for(var j = 0; j < semana.length; j++){ %>
+                        <% var dia = semana[j] %>
+                        <td class="text-right">
+                            <!-- Buscamos los Ingresos en éste día -->
+                            <!-- Recorremos los Ingresos -->
+                            <% var total_ingreso = 0 %>
+                            <% for(var k = 0; k < ingresos.length; k++){ %>
+                            <% var ingreso = ingresos[k] %>
+                            <% if(bus.nro == ingreso.bus.nro && dia.toLocaleDateString() == ingreso.log.fecha.toLocaleDateString()){ %>
+                            <% total_ingreso = total_ingreso + ingreso.monto %>
+                            <%= ingreso.monto.toFixed(2) %> <br>
+                            <% } %>
+                            <% } %>
+                            <% if(total_ingreso > 0){ %>
+                            <% suma_ingreso = suma_ingreso + total_ingreso %>
+                            <span class="text-primary font-weight-bold"><%= total_ingreso.toFixed(2) %></span> <br>
+                            <% } %>
+                            <!-- Buscamos las Ventas en éste día -->
+                            <!-- Recorremos las Ventas -->
+                            <% var total_venta = 0 %>
+                            <% for(var k = 0; k < ventas.length; k++){ %>
+                            <% var venta = ventas[k] %>
+                            <% if(bus.nro == venta.bus.nro && dia.toLocaleDateString() == venta.log.fecha.toLocaleDateString()){ %>
+                            <% total_venta = total_venta + venta.monto %>
+                            <%= venta.monto.toFixed(2) %> <br>
+                            <% } %>
+                            <% } %>
+                            <%  if(total_venta > 0){ %>
+                            <% suma_venta = suma_venta + total_venta %>
+                            <span class="text-danger font-weight-bold"><%= total_venta.toFixed(2) %></span> <br>
+                            <% } %>
+                            <% if(total_ingreso !=0 || total_venta != 0) { %>
+                            <span class="text-dark font-weight-bold">
+                                <%= (total_ingreso - total_venta).toFixed(2) %></span>
+                            <% } %>
+                        </td>
+                        <% } %>
+                        <td class="text-right">
+                            <% if(suma_ingreso !=0 || suma_venta !=0 ){ %>
+                            <span class="text-primary font-weight-bold"><%= suma_ingreso.toFixed(2) %></span> <br>
+                            <span class="text-danger font-weight-bold"><%= suma_venta.toFixed(2) %></span> <br>
+                            <% if(suma_ingreso - suma_venta < 0){ %>
+                            <span
+                                class="bg-warning text-dark font-weight-bold"><%= (suma_ingreso - suma_venta).toFixed(2) %>
+                            </span>
+                            <% } else { %>
+                            <span class="text-dark font-weight-bold"><%= (suma_ingreso - suma_venta).toFixed(2) %>
+                            </span>
+                            <% } %>
+                            <br>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<% include _footer %>
+
+<script>
+    // En todas las Ventanas
+    $("#cargando").hide()
+    // var x  = (new Date()).to
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>

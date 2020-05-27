@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Ingreso Tupac Amaru II</title>
+</head>
+
+<body>
+    <% if(ingreso){ %>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Tupac Amaru II - Ingreso <%= ingreso._id %></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Fecha</td>
+                <td>: <%= ingreso.log.fecha.toLocaleString() %></td>
+            </tr>
+            <tr>
+                <td>Bus Nro</td>
+                <td>: <%= ingreso.bus.nro %></td>
+            </tr>
+            <tr>
+                <td>Bus Placa</td>
+                <td>: <%= ingreso.bus.placa %></td>
+            </tr>
+            <tr>
+                <td>Monto</td>
+                <td>: <%= ingreso.monto %></td>
+            </tr>
+            <tr>
+                <td>Aportante</td>
+                <td>: <%= ingreso.aportante %></td>
+            </tr>
+            <tr>
+                <td>Empresa</td>
+                <td>: <%= ingreso.empresa %></td>
+            </tr>
+            <tr>
+                <td>Referencia</td>
+                <td>: <%= ingreso.referencia %></td>
+            </tr>
+            <tr>
+                <td>Saldo Actual:</td>
+                <td><%= saldo_actual.toFixed(2) %></td>
+            </tr>
+        </tbody>
+    </table>
+    <% } else { %>
+        <p>（ ^_^） Error 304, tu mujer nos engaña （^_^ ）</p>
+    <% } %>
+</body>
+
+</html>
+<script>
+    window.print()
+    window.onafterprint = function ir_Actividad() {
+        window.location.replace('/ingresos')
+    }
+</script>

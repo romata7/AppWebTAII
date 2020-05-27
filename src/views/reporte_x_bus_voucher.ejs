@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reporte por Bus - Tupac Amaru II</title>
+</head>
+
+<body>
+    <!-- <h3>Tupac Amaru II</h3>
+    <table>
+        <tbody>
+            <tr>
+                <td>Generado</td>
+                <td>:<%= hoy.toLocaleString() %></td>
+            </tr>
+            <tr>
+                <td>Bus Nro</td>
+                <td>:<%= bus.nro %></td>
+            </tr>
+            <tr>
+                <td>Bus Placa</td>
+                <td>:<%= bus.placa %></td>
+            </tr>
+            <tr>
+                <td>Desde</td>
+                <td>:<%= (new Date(f1)).toLocaleString() %></td>
+            </tr>
+            <tr>
+                <td>Hasta</td>
+                <td>:<%= (new Date(f2)).toLocaleString() %></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Ingresos de Dinero</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Vou.</th>
+                <th>Fecha</th>
+                <th>Aportante</th>
+                <th>Empresa</th>
+                <th>Referencia</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var total_ingreso = 0 %>
+            <% for(var i = 0; i < ingresos.length; i++){ %>
+            <% var ingreso = ingresos[i] %>
+            <% total_ingreso = total_ingreso + ingreso.monto %>
+            <tr>
+                <td><%= i + 1 %> </td>
+                <td><%= ingreso._id %></td>
+                <td><%= ingreso.log.fecha.toLocaleString() %></td>
+                <td><%= ingreso.aportante %></td>
+                <td><%= ingreso.empresa %></td>
+                <td><%= ingreso.referencia %></td>
+                <td><%= ingreso.monto.toFixed(2) %></td>
+            </tr>
+            <% } %>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total:</td>
+                <td><%= total_ingreso.toFixed(2) %></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Ventas de Combustible</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Vou.</th>
+                <th>Fecha</th>
+                <th>Conductor</th>
+                <th>Costo</th>
+                <th>Galones</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var total_ventas = 0 %>
+            <% var total_galones = 0 %>
+            <% for(var i = 0; i < ventas.length; i++){ %>
+            <% var venta = ventas[i] %>
+            <% total_ventas = total_ventas + venta.monto %>
+            <% total_galones = total_galones + venta.galones %>
+            <tr>
+                <td><%= i + 1 %> </td>
+                <td><%= venta._id %></td>
+                <td><%= venta.log.fecha.toLocaleString() %></td>
+                <td><%= venta.conductor %></td>
+                <td><%= (venta.monto / venta.galones).toFixed(2) %></td>
+                <td><%= venta.galones.toFixed(3) %></td>
+                <td><%= venta.monto.toFixed(2) %></td>
+            </tr>
+            <% } %>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total:</td>
+                <td><%= total_galones.toFixed(3) %></td>
+                <td><%= total_ventas.toFixed(2) %></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Resumen</h4>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>Total Ingreso</th>
+                <th>Total Venta</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><%= total_ingreso.toFixed(2) %></td>
+                <td><%= total_ventas.toFixed(2) %></td>
+                <td><%= (total_ingreso - total_ventas).toFixed(2) %> </td>
+            </tr>
+        </tbody>
+    </table> -->
+
+    <% include _reporte_x_bus %>
+</body>
+
+</html>
+
+<script>
+    window.print()
+    window.onafterprint = function ir_Actividad() {
+        window.location.replace('/reporte_x_bus')
+    }
+</script>

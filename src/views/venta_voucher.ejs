@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Venta Tupac Amaru II</title>
+</head>
+
+<body>
+    <% if(venta) { %>
+    <table>
+        <th>
+            <tr>
+                <th colspan="2">Tupac Amaru II - Venta <%= venta._id %></th>
+            </tr>
+        </th>
+        <tbody>
+            <tr>
+                <td>Fecha</td>
+                <td>: <%= venta.log.fecha.toLocaleString() %></td>
+            </tr>
+            <tr>
+                <td>Bus Nro</td>
+                <td>: <%= venta.bus.nro %></td>
+            </tr>
+            <tr>
+                <td>Bus Placa</td>
+                <td>: <%= venta.bus.placa %></td>
+            </tr>
+            <tr>
+                <td>Monto</td>
+                <td>: <%= venta.monto.toFixed(2) %></td>
+            </tr>
+            <tr>
+                <td>Galones</td>
+                <td>: <%= venta.galones.toFixed(3) %></td>
+            </tr>
+            <tr>
+                <td>Cost. x Galon</td>
+                <td>: <%= venta.costo_x_galon.toFixed(2) %></td>
+            </tr>
+            <tr>
+                <td>Conductor</td>
+                <td>: <%= venta.conductor %></td>
+            </tr>
+            <tr>
+                <td>Saldo Actual:</td>
+                <td><%= saldo_actual.toFixed(2) %></td>
+            </tr>
+        </tbody>
+    </table>
+    <% } else { %>
+    <p>（ ^_^） Error 304, tu mujer nos engaña （^_^ ）</p>
+    <% } %>
+
+</body>
+
+</html>
+
+<script>
+    window.print()
+    window.onafterprint = function ir_Actividad() {
+        window.location.replace('/ventas')
+    }
+</script>

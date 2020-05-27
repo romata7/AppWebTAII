@@ -1,0 +1,225 @@
+<% include _header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-7 col-sm-6 col-md-5 col-lg-4 col-xl-3 mt-3 mx-auto">
+            <div class="card">
+                <div class="card-header">Agregar Bus</div>
+                <form action="/bus/agregar" method="post">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Nro:</small>
+                        <input type="number" step="1" class="form-control form-control-sm" required autofocus
+                            name="nro" min="0">
+                        <small class="form-text text-muted">Placa:</small>
+                        <input type="text" class="form-control form-control-sm" required name="placa" id="add_placa"
+                            maxlength="7">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm mr-1" type="submit">Registrar</button>
+                            <a href="/buses" class="btn btn-secondary btn-sm">Limpiar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 mt-3 small">
+            <table class="table table-hover table-sm text-nowrap">
+                <thead class="thead thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nro Op.</th>
+                        <th>Fecha</th>
+                        <th>Bus Nro</th>
+                        <th>Bus Placa</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = buses.length - 1; i >= 0; i--){ %>
+                    <% var bus = buses[i] %>
+                    <tr>
+                        <td class="align-middle"><%= i + 1 %></td>
+                        <td class="align-middle text-center"><%= bus._id %></td>
+                        <td class="align-middle"><%= bus.log.fecha.toLocaleString() %></td>
+                        <td class="align-middle text-center"><%= bus.nro %></td>
+                        <td class="align-middle"><%= bus.placa %></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-danger mr-1"
+                                    onclick="proceder('del','<%= JSON.stringify(bus) %>')">Eliminar</button>
+                                <button class="btn btn-secondary"
+                                    onclick="proceder('edit','<%= JSON.stringify(bus) %>')">Modificar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal Password -->
+<div class="modal" id="modalPass">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <img src="img/RootmarsFall.gif" alt="" class="card-img-top">
+                <div class="card-body">
+                    <div class="alert alert-danger small text-justify" role="alert">
+                        ( ఠ ͟ʖ ఠ) Modificar los datos de los Buses o Eliminar Buses, influenciará en los distintos
+                        módulos:
+                        'Reporte por Buses', 'Resumen Semanal', 'Resumen Global', 'Resumen por fechas' entre otros
+                        Módulos. <strong> ¡Mucho Cuidado! </strong>
+                    </div>
+                    <div class="form-group">
+                        <small class="form-text text-muted">Contraseña: </small>
+                        <input type="password" class="form-control form-control-sm" id="pass">
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm btn-block text-center" data-dismiss="modal">No sé la
+                        Contraseña
+                        ಥ_ಥ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin -->
+<!-- Modal Eliminar -->
+<div class="modal" id="modalDel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">Eliminar Bus</div>
+                <form action="/bus/eliminar" method="post" id="form_bus_del">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Nro Operación:</small>
+                        <input type="number" class="form-control form-control-sm" id="del_nro_op" readonly>
+                        <small class="form-text text-muted">Bus Nro:</small>
+                        <input type="number" step="1" class="form-control form-control-sm" readonly autofocus name="nro"
+                            id="del_nro">
+                        <small class="form-text text-muted">Bus Placa:</small>
+                        <input type="text" class="form-control form-control-sm" readonly name="placa" maxlength="7"
+                            id="del_placa">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-danger btn-sm mr-1" type="submit">Eliminar</button>
+                            <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin -->
+<!-- Modal Modificar -->
+<div class="modal" id="modalEdit">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">Modificar Bus</div>
+                <form action="/bus/modificar" method="post" id="form_bus_edit">
+                    <div class="card-body">
+                        <div class="alert alert-primary small" role="alert">
+                            Puedes Modificar el Número de bus o la Placa del Bus. No! ambos campos.
+                            <p class="small text-muted">Para tal caso, mejor agrega uno nuevo (° ͜ʖ͡°)╭∩╮</p>
+                        </div>
+                        <small class="form-text text-muted">Nro Operación:</small>
+                        <input type="number" class="form-control form-control-sm" id="edit_nro_op" readonly>
+                        <small class="form-text text-muted">Bus Nro:</small>
+                        <input type="number" step="1" class="form-control form-control-sm" required autofocus name="nro"
+                            id="edit_nro">
+                        <small class="form-text text-muted">Bus Placa:</small>
+                        <input type="text" class="form-control form-control-sm" required name="placa" maxlength="7"
+                            id="edit_placa">
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <button class="btn btn-success btn-sm mr-1" type="submit">Modificar</button>
+                            <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin -->
+<% include _footer %>
+
+<script>
+    var op = ""
+    var b = ""
+    function Modificar(bus) {
+        bus = JSON.parse(bus)
+        $("#form_bus_edit").attr('action', '/bus/modificar/' + bus._id)
+        $("#edit_nro_op").val(bus._id)
+        $("#edit_nro").val(bus.nro)
+        $("#edit_placa").val(bus.placa)
+        $("#modalEdit").modal('show')
+        $("#edit_nro").focus()
+    }
+    function Eliminar(bus) {
+        bus = JSON.parse(bus)
+        $("#form_bus_del").attr('action', '/bus/eliminar/' + bus._id)
+        $("#del_nro_op").val(bus._id)
+        $("#del_nro").val(bus.nro)
+        $("#del_placa").val(bus.placa)
+        $("#modalDel").modal('show')
+    }
+
+    function proceder(operacion, bus) {
+        op = operacion
+        b = bus
+        $("#modalPass").modal('show')
+        $("#pass").val('')
+        $("#pass").focus()
+    }
+    $("#pass").keyup(() => {
+        if ($("#pass").val() == '<%= pass %>') {
+            $("#modalPass").modal('hide')
+            if (op == "del") {
+                Eliminar(b)
+            } else {
+                if (op == 'edit') {
+                    Modificar(b)
+                }
+            }
+        }
+    })
+
+    $("#add_placa").keyup((key) => {
+        key.target.value = key.target.value.toUpperCase()
+        if (key.target.value.length == 4 && !key.target.value.includes('-')) {
+            key.target.value = key.target.value.substring(0, 3) + '-' + key.target.value.substring(3, 4)
+        }
+        if (key.keyCode != 8) {
+            if (key.target.value.length == 3) {
+                key.target.value = key.target.value + '-'
+            }
+        }
+    })
+    $("#edit_placa").keyup((key) => {
+        key.target.value = key.target.value.toUpperCase()
+        if (key.target.value.length == 4 && !key.target.value.includes('-')) {
+            key.target.value = key.target.value.substring(0, 3) + '-' + key.target.value.substring(3, 4)
+        }
+        if (key.keyCode != 8) {
+            if (key.target.value.length == 3) {
+                key.target.value = key.target.value + '-'
+            }
+        }
+    })
+
+    // En todas las Ventanas
+    $("#cargando").hide()
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>

@@ -1,0 +1,96 @@
+<% include _header.ejs %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-7 col-sm-6 col-md-5 col-lg-4 col-xl-3 mt-3 mx-auto">
+            <div class="card">
+                <div class="card-header">Reporte Por Bus</div>
+                <form action="/reporte_x_bus_voucher" method="post" id="form_actividad">
+                    <div class="card-body">
+                        <small class="form-text text-muted">Bus:</small>
+                        <select name="bus" id="buscar_bus" class="form-control form-control-sm" autofocus>
+                            <% for(var i = 0; i < buses.length; i++){ %>
+                            <% var bus = buses[i] %>
+                            <option value="<%= JSON.stringify(bus) %>"><%= bus.nro %> : <%= bus.placa %>
+                            </option>
+                            <% } %>
+                        </select>
+                        <small class="form-text text-muted">Desde:</small>
+                        <input type="date" class="form-control form-control-sm" required id="id_f1" name="f1">
+                        <small class="form-text text-muted">Hasta:</small>
+                        <input type="date" class="form-control form-control-sm" required id="id_f2" name="f2">
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-sm mr-1" onclick="buscar()">
+                                Buscar
+                            </span>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm mr-1" id="btn_print">
+                                <img src="img/icons8_print_26px.png" alt="print" height="18">
+                            </button>
+                            <a href="/reporte_x_bus" class="btn btn-secondary btn-sm">Limpiar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-7 col-lg-8 col-xl-9 mt-3">
+            <div id="d_tabla">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("input").focus(() => {
+        $("#btn_print").hide()
+    })
+    $("select").focus(() => {
+        $("#btn_print").hide()
+    })
+    $("#btn_print").hide()
+
+    function getYYYYMMDD(f) {
+        var a = f.getFullYear()
+        var m = f.getMonth() + 1
+        if (m < 10) m = '0' + m
+        var d = f.getDate()
+        if (d < 10) d = '0' + d
+        return a + '-' + m + '-' + d
+    }
+
+    var f = new Date()
+    $("#id_f1").val(getYYYYMMDD(f))
+    $("#id_f2").val(getYYYYMMDD(f))
+
+
+    function buscar() {
+        var bus = $("#buscar_bus").val()
+        var f01 = $("#id_f1").val()
+        var f02 = $("#id_f2").val()
+
+        $("#btn_print").show()
+        cargar()
+        $("#d_tabla").load('/_reporte_x_bus', {
+            bus: bus,
+            f1: f01,
+            f2: f02,
+        }, () => {
+            contenido()
+        })
+    }
+    // En todas las Ventanas   
+    $("#cargando").hide()
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    function contenido() {
+        $("#cargando").hide()
+        $("#contenido").show()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>

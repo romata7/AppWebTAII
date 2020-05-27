@@ -1,0 +1,162 @@
+<% include _header %>
+
+<div class="container small">
+    <div class="row">
+        <div class="col mt-3">
+            <h4 class="text-center">Ingresos de Dinero</h4>
+            <table class="table table-hover table-sm text-nowrap">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th class="text-nowrap">Nro Ingreso</th>
+                        <th>Fecha</th>
+                        <th>Evento</th>
+                        <th>Activo</th>
+                        <th>Origen</th>
+                        <th>Bus</th>
+                        <th>Monto</th>
+                        <th>Aportante</th>
+                        <th>Empresa</th>
+                        <th>Referencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = ingresos.length - 1; i >= 0; i--){ %>
+                    <% var ingreso = ingresos[i] %>
+                    <% var log = ingreso.log %>
+                    <% if(!log.activo){ %>
+                    <tr class="table-danger">
+                        <% }else{ %>
+                        <% if(log.evento == 'MODIFICADO'){ %>
+                    <tr class="table-info">
+                        <% }else{ %>
+                    <tr>
+                        <% } %>
+                        <% } %>
+                        <td class="align-middle"><%= i + 1 %></td>
+                        <td class="align-middle text-center"> <%= ingreso._id %></td>
+                        <td class="align-middle"><%= ingreso.log.fecha.toLocaleString() %></td>
+                        <td class="align-middle"><%= ingreso.log.evento %></td>
+                        <td class="align-middle"><%= ingreso.log.activo %></td>
+                        <td class="align-middle font-weight-bold"><%= ingreso.log.origen %></td>
+                        <td class="align-middle"><%= ingreso.bus.nro %> : <%= ingreso.bus.placa %></td>
+                        <td class="align-middle"><%= ingreso.monto %></td>
+                        <td class="align-middle"><%= ingreso.aportante %></td>
+                        <td class="align-middle"><%= ingreso.empresa %></td>
+                        <td class="align-middle"><%= ingreso.referencia %></td>
+
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-3">
+            <h4 class="text-center">Venta de Combustible</h4>
+            <table class="table table-hover table-sm text-nowrap table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th class="text-nowrap">Nro Venta</th>
+                        <th>Fecha</th>
+                        <th>Evento</th>
+                        <th>Activo</th>
+                        <th>Origen</th>
+                        <th>Bus</th>
+                        <th>Monto</th>
+                        <th>Galones</th>
+                        <th>Cost. Galón</th>
+                        <th>Conductor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = ventas.length - 1; i >= 0; i--){ %>
+                    <% var venta = ventas[i] %>
+                    <% var log = venta.log %>
+                    <% if(!log.activo){ %>
+                    <tr class="table-danger">
+                        <% }else{ %>
+                        <% if(log.evento == 'MODIFICADO'){ %>
+                    <tr class="table-info">
+                        <% }else{ %>
+                    <tr>
+                        <% } %>
+                        <% } %>
+                        <td class="align-middle"> <%= i + 1 %> </td>
+                        <td class="align-middle text-center"> <%= venta._id %></td>
+                        <td class="align-middle"> <%= venta.log.fecha.toLocaleString() %> </td>
+                        <td class="align-middle"> <%= venta.log.evento %> </td>
+                        <td class="align-middle"> <%= venta.log.activo %> </td>
+                        <td class="align-middle font-weight-bold"> <%= venta.log.origen %> </td>
+                        <td class="align-middle"> <%= venta.bus.nro %> : <%= venta.bus.placa %> </td>
+                        <td class="align-middle"> <%= venta.monto.toFixed(2) %> </td>
+                        <td class="align-middle"> <%= venta.galones.toFixed(3) %> </td>
+                        <td class="align-middle"> <%= venta.costo_x_galon.toFixed(2) %> </td>
+                        <td class="align-middle"> <%= venta.conductor %> </td>
+
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-3">
+            <h4 class="text-center">Buses</h4>
+            <table class="table table-hover table-sm text-nowrap">
+                <thead class="thead thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nro Op.</th>
+                        <th>Fecha</th>
+                        <th>Evento</th>
+                        <th>Activo</th>
+                        <th>Origen</th>
+                        <th>Bus Nro</th>
+                        <th>Bus Placa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = buses.length - 1; i >= 0; i--){ %>
+                    <% var bus = buses[i] %>
+                    <% var log = bus.log %>
+                    <% if(!log.activo){ %>
+                    <tr class="table-danger">
+                        <% }else{ %>
+                        <% if(log.evento == 'MODIFICADO'){ %>
+                    <tr class="table-info">
+                        <% }else{ %>
+                    <tr>
+                        <% } %>
+                        <% } %>
+                        <td class="align-middle"><%= i + 1 %></td>
+                        <td class="align-middle text-center"><%= bus._id %></td>
+                        <td class="align-middle"><%= bus.log.fecha.toLocaleString() %></td>
+                        <td class="align-middle"><%= bus.log.evento %></td>
+                        <td class="align-middle"><%= bus.log.activo %></td>
+                        <td class="align-middle font-weight-bold"><%= bus.log.origen %></td>
+                        <td class="align-middle text-center"><%= bus.nro %></td>
+                        <td class="align-middle"><%= bus.placa %></td>
+
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<% include _footer %>
+
+<script>
+    // En todas las Ventanas
+    $("#cargando").hide()
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>

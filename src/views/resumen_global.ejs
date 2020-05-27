@@ -1,0 +1,83 @@
+<% include _header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4 mt-3 mx-auto">
+            <div class="alert alert-success small text-justify" role="alert">
+                (づ｡◕‿‿◕｡)づ Desde el primer ingreso de dinero y/o consumo de combustible, hasta ahora.
+            </div>
+            <table class="table table-hover table-sm small">
+                <thead class="thead thead-dark">
+                    <tr>
+                        <th>Bus</th>
+                        <th>Total Ingreso</th>
+                        <th>Total Venta</th>
+                        <th>Saldo Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < buses.length; i++){ %>
+                    <% var bus = buses[i] %>
+                    <tr>
+                        <td><%= bus.nro %></td>
+                        <td class="text-right">
+                            <% var total_ingreso = 0 %>
+                            <% for(var j = 0; j < ingresos.length; j++){ %>
+                            <% var ingreso = ingresos[j] %>
+                            <% if(bus.nro == ingreso.bus.nro) { %>
+                            <% total_ingreso = total_ingreso + ingreso.monto %>
+                            <% } %>
+                            <% } %>
+                            <% if(total_ingreso > 0) { %>
+                            <%= total_ingreso.toFixed(2) %>
+                            <% } %>
+                        </td>
+                        <td class="text-right">
+                            <% var total_venta = 0 %>
+                            <% for(var j = 0; j < ventas.length; j++){ %>
+                            <% var venta = ventas[j] %>
+                            <% if(bus.nro == venta.bus.nro) { %>
+                            <% total_venta = total_venta + venta.monto %>
+                            <% } %>
+                            <% } %>
+                            <% if(total_venta > 0) { %>
+                            <%= total_venta.toFixed(2) %>
+                            <% } %>
+                        </td>
+                        <td class="text-right font-weight-bold">
+                            <% if(total_ingreso !=0 || total_venta != 0) { %>
+
+                            <% if((total_ingreso - total_venta < 0)) { %>
+                            <span class="text-danger">
+                                <%= (total_ingreso - total_venta).toFixed(2) %>
+                            </span>
+                            <% } else { %>
+                            <span class="text-primary">
+                                <%= (total_ingreso - total_venta).toFixed(2) %>
+                            </span>
+                            <% } %>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<% include _footer %>
+
+<script>
+    // En todas las Ventanas
+    $("#cargando").hide()
+    // var x  = (new Date()).to
+    function cargar() {
+        $("#cargando").show()
+        $("#contenido").hide()
+    }
+    $('form').submit(() => {
+        cargar()
+    })
+</script>
